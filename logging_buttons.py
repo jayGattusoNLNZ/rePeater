@@ -14,6 +14,7 @@ last_command_frame  = tk.Frame(root)
 my_button_font = ('helvetica', 16, 'bold')
 my_guide_font = ('helvetica', 8)
 
+
 def deleteCallBack():
 	my_path = delete_path_name.get().replace(collection_root.get().strip(), "", 1)
 	my_path = my_path.replace(collection_root.get(), "", 1)
@@ -28,9 +29,10 @@ def deleteCallBack():
 	delete_path_name.delete( 0, tk.END)
 
 def moveCallBack():
-	my_path_orginal = move_source_name.get().replace(collection_root.get().strip(), "", 1)
-	my_path_destination = move_destination_name.get().replace(collection_root.get().strip(), "", 1)
-	log_f_name = "{}.txt".format(log_file_name.get())
+	my_path_orginal = move_source_name.get().replace(collection_root.get().strip(), "", 1).strip()
+	my_path_destination = move_destination_name.get().replace(collection_root.get().strip(), "", 1).strip()
+	log_f_name = "{}.txt".format(log_file_name.get().strip())
+
 	log_row = f"move\t{my_path_orginal}\t{my_path_destination}"
 	with open(log_f_name, "a") as data:
 		data.write(log_row+"\n")
@@ -42,27 +44,27 @@ def moveCallBack():
 	move_destination_name.delete( 0, tk.END)
 
 def extractCallBack():
-	my_zip_file = extract_zip_file.get()
-	my_zip_file = my_zip_file.replace(collection_root.get().strip(), "", 1)
-	my_file_from_zip = extract_file_from_zip.get()
-	log_f_name = "{}.txt".format(log_file_name.get())
-	log_row = f"extract\t{my_zip_file}\t{my_file_from_zip}"
+	my_zip_file = extract_zip_file.get().replace(collection_root.get().strip(), "", 1).strip()
+	my_file_from_zip = extract_file_from_zip.get().strip()
+	my_new_zip_file_location = extract_new_file_from_zip_location.get().replace(collection_root.get().strip(), "", 1).strip()
+	log_f_name = "{}.txt".format(log_file_name.get().strip())
+
+	log_row = f"extract\t{my_zip_file}\t{my_file_from_zip}\t{my_new_zip_file_location}"
 	with open(log_f_name, "a") as data:
 		data.write(log_row+"\n")
 
 	last_command_text.delete( 1.0, tk.END)
 	last_command_text.insert(tk.END, log_row)
 
-	extract_zip_file.delete( 0, tk.END)
+	# extract_zip_file.delete( 0, tk.END) ### hmmm. TODO - poss include a check box.. 
 	extract_file_from_zip.delete( 0, tk.END)
+	extract_new_file_from_zip_location.delete( 0, tk.END)
 
 def renameCallBack():
-	my_original_file_path = rename_source_name.get()
-	my_original_file_path = my_original_file_path.replace(collection_root.get().strip(), "", 1)
-	my_destination_file_path = rename_destination_name.get()
-	my_destination_file_path  = my_destination_file_path.replace(collection_root.get().strip(), "", 1)
+	my_original_file_path = rename_source_name.get().replace(collection_root.get().strip(), "", 1).strip()
+	my_destination_file_path = rename_destination_name.get().replace(collection_root.get().strip(), "", 1)
+	log_f_name = "{}.txt".format(log_file_name.get().strip())
 
-	log_f_name = "{}.txt".format(log_file_name.get())
 	log_row = f"rename\t{my_original_file_path}\t{my_destination_file_path}"
 	with open(log_f_name, "a") as data:
 		data.write(log_row+"\n")
@@ -80,14 +82,14 @@ collection_root_label = tk.Label(col_root_frame, text ="Collection root")
 
 delete_logger = tk.Button(delete_frame, text ="Delete", command=lambda: deleteCallBack(),  height=2, width=10, bg = "indian red")
 delete_logger.config(font=my_button_font)
-delete_label = tk.Label(delete_frame, text="Put full path to folder here:")
+delete_label = tk.Label(delete_frame, text="Full path to folder or file:")
 delete_label.config(font=my_guide_font)
 delete_path_name = tk.Entry(delete_frame, width=30)
 
 move_logger = tk.Button(move_frame, text ="Move", command=lambda: moveCallBack(), height=2, width=10, bg = "DarkSeaGreen2")
 move_logger.config(font=my_button_font)
 move_source_name = tk.Entry(move_frame, width=30)
-move_source_label = tk.Label(move_frame, text="Full path of source folder:")
+move_source_label = tk.Label(move_frame, text="Full path of source folder or file:")
 move_source_label.config(font=my_guide_font)
 move_destination_name = tk.Entry(move_frame, width=30)
 move_destingation_label = tk.Label(move_frame, text="Full path of destination folder:")
@@ -98,9 +100,12 @@ extract_logger.config(font=my_button_font)
 extract_zip_label = tk.Label(extract_frame, text="Path to zip file:")
 extract_zip_label.config(font=my_guide_font)
 extract_zip_file = tk.Entry(extract_frame, width=30)
-extract_file_label = tk.Label(extract_frame, text="Path in zip file")
-extract_file_label .config(font=my_guide_font)
+extract_file_label = tk.Label(extract_frame, text="Path in zip file if file or folder")
+extract_file_label.config(font=my_guide_font)
 extract_file_from_zip = tk.Entry(extract_frame, width=30)
+extract_new_file_from_zip_location = tk.Entry(extract_frame, width=30)
+extract_new_file_from_zip_location_label = tk.Label(extract_frame, text="Destination folder")
+extract_new_file_from_zip_location_label.config(font=my_guide_font)
 
 rename_logger = tk.Button(rename_frame, text ="Rename", command=lambda: renameCallBack(), height=2, width=10, bg = "MediumPurple2")
 rename_logger.config(font=my_button_font)
@@ -148,6 +153,8 @@ extract_zip_label.grid(row=1,column=2)
 extract_zip_file.grid(row=2,column=2)
 extract_file_label.grid(row=3,column=2)
 extract_file_from_zip.grid(row=4, column=2)
+extract_new_file_from_zip_location_label.grid(row=5, column=2)
+extract_new_file_from_zip_location.grid(row=6, column=2)
 extract_frame.grid(row=8, column=1)
 
 ttk.Separator(root, orient=tk.HORIZONTAL).grid(row=9, column=1, columnspan=3, sticky='we', padx=10,  pady=10 )
@@ -168,5 +175,3 @@ last_command_frame.grid(row=12, column=1)
 root.wm_attributes("-topmost", 1)
 root.lift()
 root.mainloop()
-
-
