@@ -16,27 +16,21 @@ You log the instruction, hit the button, and it records your instruction.
 
 The collection root label is removed from your instrucion, and the scripts that are used to "replay" the instuctions will deal with turning the relative paths into absolute paths as needed
 
-It supports the following instuctions.
+It supports the following instuctions. All units are tab seperated
 
-Delete
-
-Instuction: 
+*Delete*
 
 delete  thing_to_be_deleted
 
-Move
-
-instruction:
+*Move*
 
 move  source_item destination_folder
 
-Extract {needs some work}... 
+*Extract* 
 
-extract path_to_container path_of_etracted_item
-
-I need to work out the best way of indicating the destination of the file
+extract path_to_container path_of_item_in_zip destination_folder
 
 
-Rename
+*Rename*
 
 rename  original_path new_path
